@@ -11,7 +11,7 @@ spec:
     targetRevision: HEAD
     path: apps/frontend
   destination:
-    server: 'https://default.svc'
+    server: 'https://kubernetes.default.svc'
     namespace: my-container-app
   syncPolicy:
     automated:
