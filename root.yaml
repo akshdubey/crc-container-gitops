@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: container-root-app
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/akshdubey/crc-container-gitops.git'
+    targetRevision: HEAD
+    path: bootstrap/
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: openshift-gitops

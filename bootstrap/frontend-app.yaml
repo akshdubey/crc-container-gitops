@@ -1,0 +1,19 @@
+# bootstrap/frontend-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: container-frontend
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/akshdubey/crc-container-gitops.git'
+    targetRevision: HEAD
+    path: apps/frontend
+  destination:
+    server: 'https://default.svc'
+    namespace: my-container-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
