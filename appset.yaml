@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: container-app-factory
+  namespace: openshift-gitops
+spec:
+  generators:
+    - git:
+        repoURL: 'https://github.com/akshdubey/crc-container-gitops.git' # Use your actual repo
+        revision: HEAD
+        directories:
+          - path: dynamic-apps/*         # The folder it will watch
+  template:
+    metadata:
+      name: 'dynamic-{{path.basename}}'  # Spawns: dynamic-backend-api & dynamic-frontend-ui
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/akshdubey/crc-container-gitops.git'
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: appset-container-app   # ◄ CHANGED: Isolated target namespace
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true         # Auto-creates appset-container-app
